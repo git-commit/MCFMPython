@@ -22,8 +22,7 @@ def main():
 
     NICK = input("Enter your username: ")
 
-    CHANNEL = input("Enter the channnel you would like to join (eg. Monstercat): ")
-    CHANNEL = "#" + CHANNEL
+    CHANNEL = "#" + input("Enter the channnel you would like to join (eg. Monstercat): ")
 
     print("Right click and paste your oauth key beginning with \"oath:\""),
     PASSWORD = getpass.getpass('(hidden):')
@@ -32,8 +31,6 @@ def main():
     PORT = 6667
     IDENT = NICK
     REALNAME = NICK
-
-    readbuffer = ""
 
     print("Connecting...")
     s = socket.socket()
@@ -52,7 +49,7 @@ def main():
     style = int(instyle)
     caps = input("All caps? (y/n): ")
     if caps == "y":
-        style = style + 4
+        style += 4
 
     songartist = styleSwitch(style)
     belowline()
@@ -68,15 +65,14 @@ def main():
 
             songartist = styleSwitch(style)
 
-            if (init or currentsongartist != songartist):
+            if init or currentsongartist != songartist:
                 init = 0
 
                 print(songartist)
-                f = open(fileloc, 'r+')
-                f.seek(0)
-                f.write(songartist)
-                f.truncate()
-                f.close()
+                with open(fileloc, 'r+') as f:
+                    f.seek(0)
+                    f.write(songartist)
+                    f.truncate()
                 currentsongartist = songartist
 
 

@@ -48,7 +48,6 @@ def main():
     belowline()
     sendIRC("PRIVMSG " + CHANNEL + " :!song\r\n", s)
     currentsongartist = ""
-    init = 1
 
     while 1:
         readbuffer = (s.recv(1024)).decode("utf-8")
@@ -58,9 +57,7 @@ def main():
 
             songartist = get_styled_output(style, song, artist, uppercase_output)
 
-            if init or currentsongartist != songartist:
-                init = 0
-
+            if currentsongartist != songartist:
                 print(songartist)
                 with open(fileloc, 'r+') as f:
                     f.seek(0)

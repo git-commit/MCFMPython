@@ -5,6 +5,7 @@ import getpass
 import os
 import os.path
 import re
+import time
 
 
 def main():
@@ -52,6 +53,7 @@ def main():
     currentsongartist = ""
 
     while 1:
+        time.sleep(1)
         readbuffer = (s.recv(1024)).decode("utf-8")
         if readbuffer.find(substring) != -1:
             song, artist = re.search(

@@ -4,13 +4,8 @@ import os
 import os.path
 import re
 
-# Global variables
-song = ""
-artist = ""
-
 
 def main():
-    global song, artist
     header()
 
     fileprompt()
@@ -48,13 +43,11 @@ def main():
     instyle = input("Style: ")
     style = int(instyle)
     caps = input("All caps? (y/n): ")
-    if caps == "y":
-        style += 4
+    uppercase_output = caps is "y"
 
-    songartist = styleSwitch(style)
     belowline()
     sendIRC("PRIVMSG " + CHANNEL + " :!song\r\n", s)
-    currentsongartist = songartist
+    currentsongartist = ""
     init = 1
 
     while 1:
@@ -63,7 +56,7 @@ def main():
             song, artist = re.search(
                 'Now Playing: (.*) by (.*) - Listen', readbuffer).groups()
 
-            songartist = styleSwitch(style)
+            songartist = get_styled_output(style, song, artist, uppercase_output)
 
             if init or currentsongartist != songartist:
                 init = 0
@@ -107,17 +100,16 @@ def fileprompt():
         "Enter your text file output location (Somewhere on C:\ recommended)")
 
 
-def styleSwitch(style):
-    global song, artist
+def get_styled_output(style, song, artist, uppercase):
+    if uppercase:
+        song = song.upper()
+        artist = artist.upper()
+
     styles = {
-        1: (" " + artist + " // " + song + " "),
-        2: (" " + song + " // " + artist + " "),
-        3: (" " + artist + " - " + song + " "),
-        4: (" " + song + " - " + artist + " "),
-        5: (" " + artist.upper() + " // " + song.upper() + " "),
-        6: (" " + song.upper() + " // " + artist.upper() + " "),
-        7: (" " + artist.upper() + " - " + song.upper() + " "),
-        8: (" " + song.upper() + " - " + artist.upper() + " ")
+        1: (" %s // %s " % (artist, song)),
+        2: (" %s // %s " % (song, artist)),
+        3: (" %s - %s " % (artist, song)),
+        4: (" %s - %s " % (song, artist)),
     }
     return styles[style]
 
